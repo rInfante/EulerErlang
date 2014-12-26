@@ -6,7 +6,7 @@
 -export([divisors/1, is_prime/1, from/1, filter/2, take/2, from_to/2, from_to_step/3, for_each/2]).
 
 divisors(N) ->
-	filter(fun(P)-> N rem P == 0 end, from_to(2, N-1)).
+	filter(fun(P)-> N rem P == 0 end, from_to(2, trunc(N/2))).
 	
 is_prime(N) ->
 	if 
@@ -22,7 +22,7 @@ is_prime(N) ->
 	end.
 	
 prime_divisors(N) ->
-	for_each(fun(PD)->io:format("Prime Divisor: ~w~n",[PD]) end, filter(fun(D) -> is_prime(D) end, divisors(N))).
+	for_each(fun(PD)->io:format("~nPrime Divisor: ~w~n",[PD]) end, filter(fun(D) -> is_prime(D) end, divisors(N))).
 	
 %lazy sequence starting from K: eager head, lazy tail
 from(K)	->
@@ -51,16 +51,21 @@ any(Pred,[Hd|Tl]) ->
 %You pass in the second parameter a function acting on lazy sequences	
 take({0,_}, _) 
 	-> [];
-take({N,_}, _) when N < 0 
+take(N, _) when N < 0 
 	-> [];	
-take({N,S}, [Hd|Tl])->
-	%DEBUG:io:format("processing ~w; N:~w; S:~w~n", [Hd,N,S]),
+take(N, [Hd|Tl])->
+	if
+		(N rem 1000000 == 0) ->
+			io:format("(~w|~w)", [Hd,N]);
+		true ->
+			io:format("")
+	end,
 	Tl1 = Tl(),
-	[Hd| fun() -> take({N-S,S}, Tl1) end].
+	[Hd| fun() -> take(N-1, Tl1) end].
 	
 from_to_step(N, M, S) ->
 	NumItems = M - N + 1,
-	take({NumItems, S}, from(N)).
+	filter(fun(X)-> (X - N) rem S == 0 end, take(NumItems, from(N))).
 	
 from_to(N, M) ->
 	from_to_step(N, M, 1).
