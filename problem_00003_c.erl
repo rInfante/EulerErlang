@@ -6,7 +6,8 @@
 -export([divisors/1, is_prime/1, from/1, filter/2, take/2, from_to/2, from_to_step/3, for_each/2]).
 
 divisors(N) ->
-	filter(fun(P)-> N rem P == 0 end, from_to(2, trunc(N/2))).
+	PotentialDivisors = from_to(2, trunc(N/2)),
+	filter(fun(P)-> N rem P == 0 end, PotentialDivisors).
 	
 is_prime(N) ->
 	if 
@@ -14,7 +15,7 @@ is_prime(N) ->
 			N >= 2;
 		(N rem 2 == 0) or (N rem 3 == 0) ->
 			false;
-		true ->
+		true ->			
 			case any(fun(P)->(N rem P == 0) or (N rem (P+2) == 0) end, from_to_step(5,trunc(math:sqrt(N)),6)) of
 				true -> false;
 				false -> true			
@@ -22,7 +23,9 @@ is_prime(N) ->
 	end.
 	
 prime_divisors(N) ->
-	for_each(fun(PD)->io:format("~nPrime Divisor: ~w~n",[PD]) end, filter(fun(D) -> is_prime(D) end, divisors(N))).
+	Divisors = divisors(N),
+	PrimeDivisors = filter(fun(D) -> is_prime(D) end, Divisors),
+	for_each(fun(PD)->io:format("~nPrime Divisor: ~w~n",[PD]) end, PrimeDivisors).
 	
 %lazy sequence starting from K: eager head, lazy tail
 from(K)	->
