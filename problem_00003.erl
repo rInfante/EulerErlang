@@ -5,10 +5,16 @@
 -export([get_primes/1, get_primes/3]).
 
 largest_prime_factor(N) ->
-	PotentialPrimeFactors = get_primes(round(N/2)),
+	PotentialPrimeFactors = 
+	if
+		N < 12 ->
+			get_primes(round(N/2));
+		true ->
+			get_primes(trunc(math:sqrt(N)))
+	end,
 	%DEBUG:io:format("N: ~w; Potential Prime Factors: ~w~n",[N, PotentialPrimeFactors]),
 	PrimeFactors = lists:filter(fun(P) -> N rem P == 0 end, PotentialPrimeFactors),
-	io:format("Prime Factors: ~w~n",[PrimeFactors]),
+	io:format("~nPrime Factors: ~w~n",[PrimeFactors]),
 	lists:max(PrimeFactors).
 		
 get_primes(UpperLimit) when UpperLimit > 1 ->
@@ -22,7 +28,8 @@ get_primes(UpperLimit, N, PreviousPrimes) ->
 		true -> PreviousPrimes;			
 		false -> [N | PreviousPrimes]
 	end,
-	%DEBUG:io:format("UpperLimit: ~w; N: ~w; PreviousPrimes: ~w; NewPreviousPrimes: ~w~n", [UpperLimit, N, PreviousPrimes,NewPreviousPrimes]),
+	%DEBUGio:format("UpperLimit: ~w; N: ~w; PreviousPrimes: ~w; NewPreviousPrimes: ~w~n", [UpperLimit, N, PreviousPrimes,NewPreviousPrimes]),
+	io:format("UpperLimit: ~w; N: ~w; ", [UpperLimit, N]),
 	get_primes(UpperLimit, N+1, NewPreviousPrimes).
 	
 			
