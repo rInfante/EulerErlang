@@ -1,6 +1,6 @@
 -module(problem_00003_d).
 
--export([solve/0]).
+-export([solve/0, factorise/1]).
 
 solve() ->
 	factorise(600851475143).
