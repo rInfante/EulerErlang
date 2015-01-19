@@ -112,3 +112,16 @@ find_minimal_value_path(Matrix, Path) ->
 					end
 			end
 	end.
+	
+%http://theory.stanford.edu/~amitp/GameProgramming/ImplementationNotes.html	
+find_minimal_value_path2(Matrix, Open, Closed) ->
+	Current = lowest_rank(Open),
+	{Xc, Yc, _} = Current,
+	case (Xc == 80 and Yc == 80) of
+		true ->
+			get_path_from(Current);
+		false ->
+			NewClosed = [Closed | [Current]],
+			Neighbors = get_neighbors(Current),
+			process_neighbors(Neighbors),
+			
