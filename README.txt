@@ -18,5 +18,6 @@
 		* problem_00015_c: my original solution using pascal triangle
 		* math formula (to double check result):
 		 (2n n) = (2n)!/(n^2)! = 815915283247897734345611269596115894272000000000 / 2432902008176640000^2
+*21:    original solution 21, but slight chnage in 21_ which makes massive perf improvement
 *27: 	
 		
